@@ -3,6 +3,8 @@ from random import *
 from datetime import datetime
 import numpy as np
 import cv2
+from PIL import Image
+from io import BytesIO
 import os
 import string
 import random
@@ -33,19 +35,18 @@ def random_number():
     }
     return jsonify(response)
 
-@app.route('/cannyFile', methods=['POST'])
+@app.route('/api/cannyFile', methods=['POST'])
 def upload():
     # if request.files['image']:
     # 画像として読み込み
     # if request.method != 'POST':
     # return make_response(jsonify({'result': 'invalid method'}), 400)
 
-
     base64_png = request.form['image']
-    print("base64",base64_png)
+    # print("base64",base64_png)
     code = base64.b64decode(base64_png.split(',')[1])  # remove header
     image_decoded = Image.open(BytesIO(code))
-    image_decoded.save(Path(app.config['SAVE_DIR']) / 'image.png')
+    # image_decoded.save(Path(app.config['SAVE_DIR']) / 'image.png')
 
     # stream = request.files['image'].stream
     # name = img.filename
@@ -65,7 +66,15 @@ def upload():
     #
     # print("save", save_path)
     # return make_response(jsonify({'result': 'success'})
-    # return jsonify(image_decoded)
+    modified_bin = BytesIO()
+    image_decoded.save(modified_bin, format="PNG")
+    img_str = base64.b64encode(modified_bin.getvalue()).decode("utf-8")
+    add_headers = "data:image/png;base64," + img_str
+    print("img_str",img_str)
+    response = {
+        'result': add_headers
+    }
+    return jsonify(response)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

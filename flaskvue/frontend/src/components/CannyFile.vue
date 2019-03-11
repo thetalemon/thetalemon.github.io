@@ -28,15 +28,21 @@ export default {
       if (file && file.type.match(/^image\/(png|jpeg)$/)) {
         this.uploadImage = URL.createObjectURL(file)
       }
-      this.postFile(URL.createObjectURL(file))
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        this.postFile(e.target.result)
+        console.log(e.target.result)
+      }
+      reader.readAsDataURL(file)
     },
-    postFile (fileURL) {
+    postFile (fileData) {
+      const path = `http://localhost:5000/api/cannyFile`
       let formData = new FormData()
-      formData.append('image', this.uploadImage)
-      const path = `http://localhost:5000/cannyFile`
+      formData.append('image', fileData)
       axios.post(path, formData)
         .then(response => {
           this.processedImage = response.data.result
+          console.log(response.data.result)
         })
         .catch(error => {
           console.log(error)
