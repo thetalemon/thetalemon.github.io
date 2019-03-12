@@ -1,25 +1,13 @@
 from flask import Flask, render_template, jsonify, request
 from random import *
-from datetime import datetime
-import numpy as np
 import cv2
-from PIL import Image
-from io import BytesIO
-import os
 import string
-import random
-import base64
+import utils
+import prosImage
 
 app = Flask(__name__,
                     static_folder = "./dist/static",
                                 template_folder = "./dist")
-
-SAVE_DIR = "./images"
-if not os.path.isdir(SAVE_DIR):
-    os.mkdir(SAVE_DIR)
-
-def random_str(n):
-    return ''.join([random.choice(string.ascii_letters + string.digits) for i in range(n)])
 
 @app.route("/api/testpost", methods=['POST'])
 def hello():
@@ -37,42 +25,18 @@ def random_number():
 
 @app.route('/api/cannyFile', methods=['POST'])
 def upload():
-    # if request.files['image']:
-    # 画像として読み込み
-    # if request.method != 'POST':
-    # return make_response(jsonify({'result': 'invalid method'}), 400)
-
     base64_png = request.form['image']
-    # print("base64",base64_png)
-    code = base64.b64decode(base64_png.split(',')[1])  # remove header
-    image_decoded = Image.open(BytesIO(code))
-    # image_decoded.save(Path(app.config['SAVE_DIR']) / 'image.png')
+    img_array = utils.base64toCV2(base64_png)
 
-    # stream = request.files['image'].stream
-    # name = img.filename
-    # path = os.path.join(app.config['UPLOAD_FOLDER'], name)
-    # img.save(path)
+    processedImg = prosImage.cannyImage(img_array)
+    calcedRGB = prosImage.calcRGB(img_array)
 
-    # img_array = np.asarray(bytearray(stream.read()), dtype=np.uint8)
-    # img = cv2.imdecode(img_array, 1)
-    #
-    # # 変換
-    # img = cv2.Canny(image, 100, 200)
-    #
-    # # 保存
-    # dt_now = datetime.now().strftime("%Y_%m_%d%_H_%M_%S_") + random_str(5)
-    # save_path = os.path.join(SAVE_DIR, dt_now + ".png")
-    # cv2.imwrite(save_path, img)
-    #
-    # print("save", save_path)
-    # return make_response(jsonify({'result': 'success'})
-    modified_bin = BytesIO()
-    image_decoded.save(modified_bin, format="PNG")
-    img_str = base64.b64encode(modified_bin.getvalue()).decode("utf-8")
-    add_headers = "data:image/png;base64," + img_str
-    print("img_str",img_str)
+    resultImage = utils.CV2toBase64(processedImg)
     response = {
-        'result': add_headers
+        'result': resultImage,
+        'red'   : calcedRGB[0],
+        'green' : calcedRGB[1],
+        'blue'  : calcedRGB[2]
     }
     return jsonify(response)
 
