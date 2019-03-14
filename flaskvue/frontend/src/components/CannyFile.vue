@@ -12,6 +12,9 @@
     <p> red   : {{ ave_red }}</p>
     <p> green : {{ ave_green }}</p>
     <p> blue  : {{ ave_blue }}</p>
+    <div v-if="music">
+      <audio controls :src="music"></audio>
+    </div>
   </div>
 </template>
 
@@ -21,7 +24,8 @@ export default {
   data () {
     return {
       uploadImage: '',
-      processedImage: ''
+      processedImage: '',
+      music: ''
     }
   },
   methods: {
@@ -48,7 +52,8 @@ export default {
           this.ave_red = response.data.red
           this.ave_green = response.data.green
           this.ave_blue = response.data.blue
-          console.log(response.data.result)
+          this.music = response.data.music
+          console.log(response.data.music)
         })
         .catch(error => {
           console.log(error)
