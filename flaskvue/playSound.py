@@ -11,8 +11,9 @@ def makeNote(note, startTime, endTime):
     return note
 
 def makeSound():
-    argsList = ['C', 'D', 'E', 'F']
+    # argsList = ['C', 'D', 'E', 'F']
 
+    argsList = ['C']
     pm = pretty_midi.PrettyMIDI(resolution=960, initial_tempo=120)
     instrument = pretty_midi.Instrument(0)
 

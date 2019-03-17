@@ -37,7 +37,7 @@ def upload():
 
     resultImage = utils.CV2toBase64(processedImg)
 
-    print('image:',resultImage)
+    print('image:',resultImage[:100])
     pm = playSound.makeSound()
     # print(pm)
     audio_data = pm.fluidsynth()
@@ -45,12 +45,12 @@ def upload():
     # pm.write('test.mid')
     f = open('test.wav','rb')
     buffer = f.read()
-    print('music:',buffer)
+    print('music:',buffer[:100])
     f.close()
     music = base64.b64encode(buffer).decode("utf-8")
-    print('encodemusic:',music)
-    add_muisc = "data:audio/midi;base64," + music
-    print('added_music:',add_muisc)
+    print('encodemusic:',music[:100])
+    add_muisc = "data:audio/wav;base64," + music
+    print('added_music:',add_muisc[:100])
     response = {
         'result': resultImage,
         'red'   : calcedRGB[0],
