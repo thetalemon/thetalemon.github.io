@@ -7,6 +7,7 @@ import prosImage
 import playSound
 import base64
 import struct
+import numpy
 from scipy.io import wavfile
 
 app = Flask(__name__,
@@ -41,9 +42,13 @@ def upload():
     pm = playSound.makeSound()
     # print(pm)
     audio_data = pm.fluidsynth()
-    wavfile.write('test.wav',44100, audio_data)
+    m = numpy.max(numpy.abs(audio_data))
+    sigf32 = (audio_data/m).astype(numpy.float32)
+
+    wavfile.write('test.wav',44100, sigf32)
     # pm.write('test.mid')
     f = open('test.wav','rb')
+    # f = open('download.wav','rb')
     buffer = f.read()
     print('music:',buffer[:100])
     f.close()
