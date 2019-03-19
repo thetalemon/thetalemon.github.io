@@ -1,7 +1,8 @@
 flaskvue/backend/venv
 flaskvue/npm-debug.log
-flaskvue/dist/static/
+flaskvue/dist/
 flaskvue/__pycache__
 *.pyc
 *.mid
 *.wav
+*.log

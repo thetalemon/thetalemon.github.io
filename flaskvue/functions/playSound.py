@@ -4,16 +4,15 @@
 import pretty_midi
 import sys
 
-
 def makeNote(note, startTime, endTime):
     note_number = pretty_midi.note_name_to_number(note)
     note = pretty_midi.Note(velocity=100, pitch=note_number, start=startTime, end=endTime)
     return note
 
 def makeSound():
-    # argsList = ['C', 'D', 'E', 'F']
+    argsList = ['C', 'D', 'E', 'F']
 
-    argsList = ['C']
+    # argsList = ['C']
     pm = pretty_midi.PrettyMIDI(resolution=960, initial_tempo=120)
     instrument = pretty_midi.Instrument(0)
 
@@ -31,4 +30,3 @@ def makeSound():
         noteTime = noteTime +1
 
     return pm
-    # pm.write('test.mid')

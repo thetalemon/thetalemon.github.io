@@ -43,17 +43,23 @@ export default {
       reader.readAsDataURL(file)
     },
     postFile (fileData) {
-      const path = `http://localhost:5000/api/cannyFile`
+      const pathCanny = `http://localhost:5000/api/cannyFile`
       let formData = new FormData()
       formData.append('image', fileData)
-      axios.post(path, formData)
+      axios.post(pathCanny, formData)
         .then(response => {
-          this.processedImage = response.data.result
+          this.processedImage = response.data.image
           this.ave_red = response.data.red
           this.ave_green = response.data.green
           this.ave_blue = response.data.blue
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      const pathMusic = `http://localhost:5000/api/makeMusic`
+      axios.get(pathMusic)
+        .then(response => {
           this.music = response.data.music
-          console.log(response.data.music)
         })
         .catch(error => {
           console.log(error)
