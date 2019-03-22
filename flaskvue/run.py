@@ -12,6 +12,9 @@ app = Flask(__name__,
                     static_folder = "./dist/static",
                                 template_folder = "./dist")
 
+if __name__ == "__main__":
+    app.run(host="0.0.0.0",port=80)
+
 @app.route("/api/testpost", methods=['POST'])
 def hello():
     response = {
