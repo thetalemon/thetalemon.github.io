@@ -24,7 +24,7 @@ export default {
       this.val1 = this.getDoubleScoreFromBackend()
     },
     getDoubleScoreFromBackend () {
-      const path = `http://localhost:5000/api/testpost`
+      const path = `/api/testpost`
       axios.post(path, this.formData)
         .then(response => {
           this.returnVal = response.data.result

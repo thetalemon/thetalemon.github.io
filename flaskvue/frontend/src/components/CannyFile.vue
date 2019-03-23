@@ -20,6 +20,13 @@
 
 <script>
 import axios from 'axios'
+// const yaml = require('js-yaml')
+// const fs = require('fs')
+// const options = yaml.safeLoad(fs.readFileSync('config.yaml'), 'utf-8')
+//
+// console.log('options:' + options)
+// console.log('path:' + options.data.url)
+
 export default {
   data () {
     return {
@@ -31,6 +38,7 @@ export default {
   methods: {
     onFileChange (e) {
       e.preventDefault()
+
       var file = e.target.files[0]
       if (file && file.type.match(/^image\/(png|jpeg)$/)) {
         this.uploadImage = URL.createObjectURL(file)
@@ -43,7 +51,7 @@ export default {
       reader.readAsDataURL(file)
     },
     postFile (fileData) {
-      const pathCanny = `http://localhost:5000/api/cannyFile`
+      const pathCanny = `/api/cannyFile`
       let formData = new FormData()
       formData.append('image', fileData)
       axios.post(pathCanny, formData)
@@ -56,7 +64,7 @@ export default {
         .catch(error => {
           console.log(error)
         })
-      const pathMusic = `http://localhost:5000/api/makeMusic`
+      const pathMusic = `/api/makeMusic`
       axios.get(pathMusic)
         .then(response => {
           this.music = response.data.music
