@@ -6,3 +6,4 @@ flaskvue/__pycache__
 *.mid
 *.wav
 *.log
+.DS_Store
